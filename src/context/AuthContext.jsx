@@ -29,8 +29,9 @@ export const AuthProvider = ({ children }) => {
       const data = await UsersAPI.register(username, email, password);
       setUser(data.user);
     } catch (error) {
-      setError(error.response?.data?.detail || "Registration failed");
-    }
+        const errorMessage = error.response?.data?.detail || error.message || "Registration failed";
+        setError(errorMessage); // Сохраняем строку, а не объект
+      }
   };
 
   // Авторизация
