@@ -38,7 +38,10 @@ export const UsersAPI = {
       console.log(localStorage.getItem('token')); // Должен выводить JWT-токен
       return response.data;
     } catch (error) {
-      throw error.response?.data || error.message;
+      if (error.response?.status === 401) {
+        localStorage.removeItem('token'); // Удаляем невалидный токен
+      }
+      throw error;
     }
   },
 
