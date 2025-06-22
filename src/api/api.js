@@ -1,5 +1,3 @@
-export default api; // Важно!
-
 import axios from 'axios';
 
 const API_URL = 'https://eventmaster2.onrender.com/api'; // URL твоего backend
