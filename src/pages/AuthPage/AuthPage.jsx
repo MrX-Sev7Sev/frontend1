@@ -39,15 +39,17 @@ export default function AuthPage() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      try {
-        await login(email, password);
-      } catch (error) {
-        setErrors({ ...errors, general: error.message });
-      }
+    try {
+      const response = await api.post('/auth/login', { 
+        username, 
+        password 
+      });
+      console.log(response.data); // Должен вернуть токен
+    } catch (error) {
+      console.error('Ошибка входа:', error);
     }
   };
-
+  
   const handleRegister = async (e) => {
     e.preventDefault();
     if (validateForm()) {
