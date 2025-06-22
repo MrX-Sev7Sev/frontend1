@@ -4,7 +4,7 @@ export const UsersAPI = {
   // Регистрация нового пользователя
   register: async (username, email, password) => {
     try {
-      const response = await api.post('/auth/signup', {
+      const response = await api.post('api/auth/signup', {
         username,
         email,
         password,
@@ -19,7 +19,7 @@ export const UsersAPI = {
   // Авторизация пользователя
   login: async (email, password) => {
     try {
-      const response = await api.post('/auth/login', {
+      const response = await api.post('api/auth/login', {
         email,
         password,
       });
@@ -33,7 +33,7 @@ export const UsersAPI = {
   // Получение профиля пользователя
   getProfile: async () => {
     try {
-      const response = await api.get('/users/me');
+      const response = await api.get('api/users/me');
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -43,7 +43,7 @@ export const UsersAPI = {
   // Обновление профиля пользователя
   updateProfile: async (profileData) => {
     try {
-      const response = await api.put('/users/me', profileData);
+      const response = await api.put('api/users/me', profileData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
