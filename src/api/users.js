@@ -4,11 +4,7 @@ export const UsersAPI = {
   // Регистрация нового пользователя
   register: async (username, email, password) => {
     try {
-      const response = await api.post('api/auth/signup', {
-        username: username,
-        email: email,
-        password: password,
-      });
+      const response = await api.post('/api/auth/signup', { username, email, password });
       localStorage.setItem('token', response.data.access_token);
       console.log('Токен сохранён:', response.data.access_token); 
       return response.data;
@@ -20,10 +16,7 @@ export const UsersAPI = {
   // Авторизация пользователя
   login: async (email, password) => {
     try {
-      const response = await api.post('api/auth/login', {
-        email,
-        password,
-      });
+      const response = await api.post('api/auth/login', { email, password, });
       localStorage.setItem('token', response.data.access_token);
       console.log('Токен сохранён:', response.data.access_token); 
       return response.data;
