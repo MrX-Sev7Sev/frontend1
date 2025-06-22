@@ -35,6 +35,7 @@ export const UsersAPI = {
   getProfile: async () => {
     try {
       const response = await api.get('/users/me');
+      console.log(localStorage.getItem('token')); // Должен выводить JWT-токен
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
