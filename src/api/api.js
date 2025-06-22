@@ -12,9 +12,9 @@ const api = axios.create({
 // Добавление токена в заголовки запросов (для авторизованных запросов)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
+  console.log('Токен в интерсепторе:', token);  // Логируем
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`; // Добавляем Bearer
-    console.log('Токен добавлен в заголовок:', token); // Логируем
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
