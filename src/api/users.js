@@ -5,9 +5,9 @@ export const UsersAPI = {
   register: async (username, email, password) => {
     try {
       const response = await api.post('api/auth/signup', {
-        username,
-        email,
-        password,
+        username: username,
+        email: email,
+        password: password,
       });
       localStorage.setItem('token', response.data.access_token);
       return response.data;
