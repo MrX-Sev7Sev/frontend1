@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = https://eventmaster2.onrender.com/api'; // URL твоего backend
+const API_URL = 'https://eventmaster2.onrender.com/api'; // URL твоего backend
 
 const api = axios.create({
   baseURL: API_URL,
