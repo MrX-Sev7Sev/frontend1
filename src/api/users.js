@@ -10,6 +10,7 @@ export const UsersAPI = {
         password: password,
       });
       localStorage.setItem('token', response.data.access_token);
+      console.log('Токен сохранён:', response.data.access_token); 
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -23,7 +24,8 @@ export const UsersAPI = {
         email,
         password,
       });
-    localStorage.setItem('token', response.data.access_token);
+      localStorage.setItem('token', response.data.access_token);
+      console.log('Токен сохранён:', response.data.access_token); 
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
