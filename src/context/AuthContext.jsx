@@ -1,4 +1,3 @@
-import api from '../api/api';
 import { createContext, useContext, useState, useEffect } from 'react';
 import { UsersAPI } from '../api/users';
 
