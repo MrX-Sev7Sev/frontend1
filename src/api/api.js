@@ -22,7 +22,10 @@ api.interceptors.response.use(
   error => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '/login'; // Перенаправление при истечении токена
+      // Вместо перезагрузки:
+      if (!window.location.pathname.includes('/login')) {
+        window.location.href = '/login'; // или используйте навигацию React Router
+      }
     }
     return Promise.reject(error);
   }
