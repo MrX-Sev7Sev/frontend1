@@ -19,10 +19,12 @@ export const UsersAPI = {
   // Авторизация пользователя
   login: async (email, password) => {
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post('/auth/login', { username: email, password });
       if (!response.data.access_token) {
         throw new Error("Токен не получен от сервера");
       } // <- Добавлена закрывающая скобка
+      console.log("Отправляемые данные:", { email, password });
+      console.log("Ответ сервера:", response.data);
       console.log('Токен сохранён:', response.data.access_token); 
       localStorage.setItem('token', response.data.access_token);
       return response.data;
