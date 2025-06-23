@@ -1,14 +1,13 @@
 import api from './api';
 
 export const UsersAPI = {
-  // Регистрация нового пользователя
+  // Регистрация
   register: async (username, email, password) => {
     try {
       const response = await api.post('/auth/signup', { username, email, password });
-      if (!response.data.access_token) {
-        throw new Error("Токен не получен от сервера");
-      } // <- Добавлена закрывающая скобка
-      console.log('Токен сохранён:', response.data.access_token); 
+      if (!response.data?.access_token) {
+        throw new Error("Токен не получен");
+      }
       localStorage.setItem('token', response.data.access_token);
       return response.data;
     } catch (error) {
@@ -16,16 +15,13 @@ export const UsersAPI = {
     }
   },
 
-  // Авторизация пользователя
+  // Авторизация
   login: async (email, password) => {
     try {
-      const response = await api.post('/auth/login', { username, email, password });
-      if (!response.data.access_token) {
-        throw new Error("Токен не получен от сервера");
-      } // <- Добавлена закрывающая скобка
-      console.log("Отправляемые данные:", { email, password });
-      console.log("Ответ сервера:", response.data);
-      console.log('Токен сохранён:', response.data.access_token); 
+      const response = await api.post('/auth/login', { email, password });
+      if (!response.data?.access_token) {
+        throw new Error("Токен не получен");
+      }
       localStorage.setItem('token', response.data.access_token);
       return response.data;
     } catch (error) {
@@ -33,21 +29,20 @@ export const UsersAPI = {
     }
   },
 
-  // Получение профиля пользователя
+  // Получение профиля
   getProfile: async () => {
     try {
       const response = await api.get('/users/me');
-      console.log(localStorage.getItem('token')); // Должен выводить JWT-токен
       return response.data;
     } catch (error) {
       if (error.response?.status === 401) {
-        localStorage.removeItem('token'); // Удаляем невалидный токен
+        localStorage.removeItem('token');
       }
       throw error;
     }
   },
 
-  // Обновление профиля пользователя
+  // Обновление профиля (Я ВЕРНУЛ ЭТОТ МЕТОД!)
   updateProfile: async (profileData) => {
     try {
       const response = await api.put('/users/me', profileData);
@@ -55,5 +50,10 @@ export const UsersAPI = {
     } catch (error) {
       throw error.response?.data || error.message;
     }
+  },
+
+  // Выход
+  logout: () => {
+    localStorage.removeItem('token');
   }
 };
