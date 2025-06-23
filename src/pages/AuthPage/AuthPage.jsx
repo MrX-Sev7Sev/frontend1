@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { UsersAPI } from '../../api/users';
 import AgreementModal from '../../components/AgreementModal';
+import { MailAuthButton } from '../../components/authentication/MailAuthButton';
 import './AuthPage.css';
 
 export default function AuthPage() {
+  const vkButtonRef = useRef(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -181,11 +183,23 @@ export default function AuthPage() {
             )}
 
             {/* Кнопка VK */}
-            <button type="button" className="auth-google-button">
+            <button 
+              type="button" 
+              className="auth-google-button"
+              ref={vkButtonRef}
+              onClick={() => {
+                // Инициируем авторизацию через VK
+                if (window.MR) {
+                  window.MR.login();
+                } else {
+                  console.error('Mail.ru SDK не загружен');
+                }
+              }}
+            >
               <img 
                 className="auth-google-icon" 
                 src="/assets/img/vk-icon.svg" 
-                alt="Google" 
+                alt="VK ID" 
               />
               Продолжить с <b>VK ID</b>
             </button>
@@ -206,6 +220,10 @@ export default function AuthPage() {
         isOpen={isAgreementModalOpen}
         onClose={closeAgreementModal}
       />
+      {/* Скрытый компонент для инициализации SDK */}
+      <div style={{ display: 'none' }}>
+        <MailAuthButton />
+      </div>
     </div>
   );
 }
