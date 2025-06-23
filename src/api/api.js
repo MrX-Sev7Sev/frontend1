@@ -1,22 +1,31 @@
 import axios from 'axios';
 
-const API_URL = 'https://eventmaster2.onrender.com/api'; // URL твоего backend
-
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: 'https://eventmaster2.onrender.com/api',
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
-// Добавление токена в заголовки запросов (для авторизованных запросов)
-api.interceptors.request.use((config) => {
+// Интерсептор для автоматической подстановки токена
+api.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
-  console.log('Токен в интерсепторе:', token);  // Логируем
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
-});
+}, error => Promise.reject(error));
+
+// Интерсептор для обработки 401 ошибки
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      window.location.href = '/login'; // Перенаправление при истечении токена
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api;
