@@ -8,6 +8,14 @@ export const MailAuthButton = () => {
     const MAILRU_CLIENT_ID = import.meta.env.VITE_MAILRU_CLIENT_ID || '890ea7b9c21d4fe98aeccd1a457dc9fc';
 
     useEffect(() => {
+        // Добавляем заглушку для radar перед загрузкой SDK
+        Object.defineProperty(window, 'radar', {
+            value: {
+                track: () => {}
+            },
+            writable: false
+        });
+
         const handleMailruAuth = async (userData) => {
             try {
                 const response = await axios.post(
