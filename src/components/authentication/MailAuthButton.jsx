@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../api';
 import axios from 'axios';
 
 export const MailAuthButton = () => {
@@ -27,21 +28,16 @@ export const MailAuthButton = () => {
         script.async = true;
         
         script.onload = () => {
-            if (window.MR) {
-                window.MR.init({
-                    clientId: MAILRU_CLIENT_ID,
-                    redirectUri: 'https://table-games.netlify.app/auth/mailru-callback',
-                    scope: 'userinfo',
-                    onlogin: (response) => {
-                        if (response.code) {
-                            handleMailruAuth({
-                                code: response.code,
-                                email: response.user?.email
-                            });
-                        }
-                    }
-                });
-            }
+          if (window.MR) {
+            window.MR.init({
+              clientId: import.meta.env.VITE_MAILRU_CLIENT_ID || '890ea7b9c21d4fe98aeccd1a457dc9fc',
+              redirectUri: 'https://table-games.netlify.app/auth/mailru-callback', // Точный адрес
+              scope: 'userinfo',
+              onlogin: (response) => {
+                if (response.code) handleAuth(response.code);
+              }
+            });
+          }
         };
 
         document.body.appendChild(script);
