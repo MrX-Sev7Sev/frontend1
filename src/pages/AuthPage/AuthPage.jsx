@@ -5,6 +5,7 @@ import { UsersAPI } from '../../api/users';
 import AgreementModal from '../../components/AgreementModal';
 import { MailAuthButton } from '../../components/authentication/MailAuthButton';
 import './AuthPage.css';
+import api from '@api/api';
 
 export default function AuthPage() {
   const vkButtonRef = useRef(null);
@@ -53,21 +54,57 @@ export default function AuthPage() {
     }
   };
   
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      if (password !== confirmPassword) {
-        setErrors({ ...errors, confirmPassword: 'Пароли не совпадают' });
-        return;
-      }
+const handleRegister = async (e) => {
+  e.preventDefault();
+  
+  // Валидация формы
+  if (!validateForm()) return;
+  
+  if (password !== confirmPassword) {
+    setErrors({ ...errors, confirmPassword: 'Пароли не совпадают' });
+    return;
+  }
 
-      try {
-        await register(email, password, email);
-      } catch (error) {
-        setErrors({ ...errors, general: error });
-      }
+  try {
+    // 1. Отправка данных регистрации
+    const response = await api.post('/auth/signup', { 
+      username: email.split('@')[0], // Генерируем username из email
+      email,
+      password
+    });
+
+    // 2. Проверка успешного ответа
+    if (!response.data?.access_token) {
+      throw new Error('Токен не получен');
     }
-  };
+
+    // 3. Сохраняем токен
+    localStorage.setItem('token', response.data.access_token);
+    
+    // 4. Обновляем состояние аутентификации
+    const userResponse = await api.get('/api/users/me');
+    setUser(userResponse.data);
+    
+    // 5. Перенаправляем пользователя
+    navigate('/'); // Или другой защищенный маршрут
+
+  } catch (error) {
+    console.error('Ошибка регистрации:', error);
+    
+    // Обработка разных типов ошибок
+    const errorMessage = error.response?.data?.detail || 
+                       error.response?.data?.message || 
+                       error.message || 
+                       'Ошибка регистрации';
+    
+    setErrors({ 
+      ...errors, 
+      general: typeof errorMessage === 'string' 
+        ? errorMessage 
+        : 'Произошла неизвестная ошибка' 
+    });
+  }
+};
 
   const openAgreementModal = () => {
     setIsAgreementModalOpen(true);
