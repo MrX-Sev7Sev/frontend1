@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import api from '../../../api/api';
+import api from '../../../api'
 import axios from 'axios';
 
 export const MailAuthButton = () => {
