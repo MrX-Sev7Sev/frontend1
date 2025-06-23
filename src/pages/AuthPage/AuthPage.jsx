@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React, { useRef } from 'react'
 import { useAuth } from '../../context/AuthContext';
 import { UsersAPI } from '../../api/users';
 import AgreementModal from '../../components/AgreementModal';
